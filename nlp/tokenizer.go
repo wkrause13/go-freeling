@@ -2,10 +2,11 @@ package nlp
 
 import (
 	"container/list"
-	set "gopkg.in/fatih/set.v0"
 	"regexp"
 	"strconv"
 	"strings"
+
+	set "gopkg.in/fatih/set.v0"
 )
 
 const (
@@ -168,6 +169,7 @@ func (this *Tokenizer) Tokenize(p string, offset int, v *list.List) {
 			for j := If(substr == 0, 0, 1).(int); j <= substr && match; j++ {
 				if len(t[j]) > 0 {
 					LOG.Trace("Accepting matched substring [" + t[j] + "]")
+					// println("Accepting matched substring [" + t[j] + "]")
 					w := NewWordFromLemma(t[j])
 					w.setSpan(offset, offset+len(t[j]))
 					offset += len(t[j])

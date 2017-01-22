@@ -52,7 +52,7 @@ func (e *Engine) InitNLP() {
 	nlpOptions.TokenizerFile = "tokenizer.dat"
 	nlpOptions.SplitterFile = "splitter.dat"
 	nlpOptions.TaggerFile = "tagger.dat"
-	nlpOptions.ShallowParserFile = "chunker/grammar-chunk.dat"
+	// nlpOptions.ShallowParserFile = "chunker/grammar-chunk.dat"
 	nlpOptions.SenseFile = "senses.dat"
 	nlpOptions.UKBFile = "" //"ukb.dat"
 	nlpOptions.DisambiguatorFile = "common/knowledge.dat"

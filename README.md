@@ -37,6 +37,10 @@ HTTP GET: *http://localhost:9999/analyzer?url=COPY HERE AN URL*
 
 Response is a self-explaining json
 
+**Notes For Spanish**
+
+regex for 'alnum' in golang is for ascii characters only and do not work with with special characters. This means the default tokenizer file will break words like español into espa ñ ol. To avoid this, replace instances of alnum with `\p{L}\d_`.
+
 -
 TODO:
 * clean code

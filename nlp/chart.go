@@ -3,6 +3,7 @@ package nlp
 import (
 	"container/list"
 	//"fmt"
+
 	"strconv"
 	"strings"
 )
@@ -22,7 +23,7 @@ func (this *ChartParser) getStartSymbol() string {
 }
 
 func (this *ChartParser) Analyze(s *Sentence) {
-	//println("Chunking sentence", s.GetBody())
+	// fmt.Printf("Chunking sentence: %v \n", s.Front().Value)
 	//var w *list.Element
 	//println("CHUNKER ")
 	for k := 0; k < s.numKBest(); k++ {
@@ -164,22 +165,23 @@ func (this *Chart) loadSentence(s *Sentence, k int) {
 	l := list.New()
 	for w = s.Front(); w != nil; w = w.Next() {
 		ce := list.New()
-		//println("Processing word " + w.Value.(*Word).getForm())
+		// println("Processing word " + w.Value.(*Word).getForm())
 		for a := w.Value.(*Word).selectedBegin(k).Element; a != w.Value.(*Word).selectedBegin(k).Next(); a = a.Next() {
 			//println("selected tags")
 			e := NewEdgeFromString(a.Value.(*Analysis).getTag(), l, 0)
 			ce.PushBack(e)
-			//println(" created edge " + a.Value.(*Analysis).getTag() + " in cell (0," + strconv.Itoa(j) + ")")
+			// println(" created edge " + a.Value.(*Analysis).getTag() + " in cell (0," + strconv.Itoa(j) + ")")
 			this.findAllRules(e, ce, 0, j)
 
 			e1 := NewEdgeFromString(a.Value.(*Analysis).getTag()+"("+w.Value.(*Word).getLCForm()+")", l, 0)
 			ce.PushBack(e1)
-			//println(" created edge " + a.Value.(*Analysis).getTag() + "(" + w.Value.(*Word).getLCForm() + ") in cell (0," + strconv.Itoa(j) + ")")
+			// println(" created edge " + a.Value.(*Analysis).getTag() + "(" + w.Value.(*Word).getLCForm() + ") in cell (0," + strconv.Itoa(j) + ")")
 			this.findAllRules(e1, ce, 0, j)
 
 			e2 := NewEdgeFromString(a.Value.(*Analysis).getTag()+"<"+a.Value.(*Analysis).getLemma()+">", l, 0)
 			ce.PushBack(e2)
-			//println(" created edge " + a.Value.(*Analysis).getTag() + "<" + a.Value.(*Analysis).getLemma() + "> in cell (0," + strconv.Itoa(j) + ")")
+			// println(e2.String())
+			// println(" created edge " + a.Value.(*Analysis).getTag() + "<" + a.Value.(*Analysis).getLemma() + "> in cell (0," + strconv.Itoa(j) + ")")
 			this.findAllRules(e2, ce, 0, j)
 		}
 
@@ -193,7 +195,7 @@ func (this *Chart) loadSentence(s *Sentence, k int) {
 		ce := this.table[this.index(0, k)]
 		//println("Found", ce.Len(), "Rules")
 		for e := ce.Front(); e != nil; e = e.Next() {
-			//println(e.Value.(*Edge).String())
+			// println(e.Value.(*Edge).String())
 			//println("_______")
 		}
 		//println("=========")
@@ -287,16 +289,19 @@ func (this *Chart) cover(a, b int) *list.List {
 		return list.New()
 	}
 
-	//println("Covering under (" + strconv.Itoa(a) + "," + strconv.Itoa(b) + ")")
+	println("Covering under (" + strconv.Itoa(a) + "," + strconv.Itoa(b) + ")")
 
 	f = false
 
 	best := NewEdge()
 
+	println("got passed NewEdge")
+
 	for i = a; !f && i >= 0; i-- {
 		for j = b; j < b+(a-i)+1; j++ {
 			//println("ED len:" + strconv.Itoa(this.table[this.index(i, j)].Len()))
 			for ed = this.table[this.index(i, j)].Front(); ed != nil; ed = ed.Next() {
+				println(ed.Value.(*Edge).String())
 				LOG.Tracef("ed.active:%b 1st best:%b", ed.Value.(*Edge).active(), this.betterEdge(ed.Value.(*Edge), best))
 				if !ed.Value.(*Edge).active() && this.betterEdge(ed.Value.(*Edge), best) {
 					x = i
@@ -307,9 +312,6 @@ func (this *Chart) cover(a, b int) *list.List {
 			}
 		}
 	}
-
-	//println("  Highest cell found is (" + strconv.Itoa(x) + "," + strconv.Itoa(y) + ")")
-	//println("   Pending (" + strconv.Itoa(y-b-1) + "," + strconv.Itoa(b) + ") (" + strconv.Itoa((a+b)-(x+y+1)) + "," + strconv.Itoa(x+y+1) + ")")
 
 	if !f {
 		LOG.Panic("Inconsistent chart or wrongly loaded sentence")
@@ -425,7 +427,7 @@ func (this *Chart) findAllRules(e *Edge, ce *list.List, k int, i int) {
 		for r := lr.Front(); r != nil; r = r.Next() {
 			newR := NewRuleFromRule(r.Value.(*Rule))
 			if this.checkMatch(newR.getRight().Front().Value.(string), e.getHead()) {
-				//println("    --> Match for " + e.getHead() + ". adding WILDCARD rule [" + newR.getHead() + "==>" + newR.getRight().Front().Value.(string) + "...etc")
+				println("    --> Match for " + e.getHead() + ". adding WILDCARD rule [" + newR.getHead() + "==>" + newR.getRight().Front().Value.(string) + "...etc")
 				ed := NewEdgeFromString(newR.getHead(), newR.getRight(), newR.getGovernor())
 				ed.shift(k, i)
 				ce.PushBack(ed)

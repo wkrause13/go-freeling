@@ -2,11 +2,12 @@ package nlp
 
 import (
 	"container/list"
-	set "gopkg.in/fatih/set.v0"
 	"io/ioutil"
 	"regexp"
 	"strconv"
 	"strings"
+
+	set "gopkg.in/fatih/set.v0"
 )
 
 type Rule struct {
@@ -165,8 +166,8 @@ func NewGrammar(fname string) *Grammar {
 	rules = append(rules, &Pair{regexp.MustCompile("==>"), GRAMMAR_ARROW})
 	rules = append(rules, &Pair{regexp.MustCompile("\\([[:alpha:]_'·\\-]+\\)"), GRAMMAR_FORM})
 	rules = append(rules, &Pair{regexp.MustCompile("<[[:lower:]_'·\\-]+>"), GRAMMAR_LEMMA})
-	rules = append(rules, &Pair{regexp.MustCompile("\\(\\\"([A-Za-z]:)?[[:alnum:]_\\-\\./\\\\]+\\\"\\)"), GRAMMAR_FILENAME})
-	rules = append(rules, &Pair{regexp.MustCompile("<\\\"([A-Za-z]:)?[[:alnum:]_\\-\\./\\\\]+\\\">"), GRAMMAR_FILENAME})
+	rules = append(rules, &Pair{regexp.MustCompile("\\(\\\"([A-Za-z]:)?[\\p{L}\\d_\\-\\./\\\\]+\\\"\\)"), GRAMMAR_FILENAME})
+	rules = append(rules, &Pair{regexp.MustCompile("<\\\"([A-Za-z]:)?[\\p{L}\\d_\\-\\./\\\\]+\\\">"), GRAMMAR_FILENAME})
 	rules = append(rules, &Pair{regexp.MustCompile("[A-Za-z][\\-A-Za-z0-9]*[*]?"), GRAMMAR_CATEGORY})
 	rules = append(rules, &Pair{regexp.MustCompile("@PRIOR"), GRAMMAR_PRIOR})
 	rules = append(rules, &Pair{regexp.MustCompile("@START"), GRAMMAR_START})
