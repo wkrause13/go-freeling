@@ -24,10 +24,10 @@ func NewEngine() *Engine {
 	}
 }
 
-var path = "./"
-var lang = "en"
-
 func (e *Engine) InitNLP() {
+	var path = "./"
+	config := NewConfiguration("conf/gofreeling.toml")
+	lang := config.Get("lang").(string)
 	e.semaphore.Lock()
 	defer e.semaphore.Unlock()
 	if e.Ready {
