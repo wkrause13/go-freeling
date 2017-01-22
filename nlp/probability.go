@@ -2,9 +2,10 @@ package nlp
 
 import (
 	"container/list"
-	set "gopkg.in/fatih/set.v0"
 	"strconv"
 	"strings"
+
+	set "gopkg.in/fatih/set.v0"
 )
 
 const (
@@ -18,6 +19,8 @@ const (
 	PROBABILITY_LAMBDA_LEX
 	PROBABILITY_LAMBDA_CLASS
 	PROBABILITY_TAGSET
+	PROBABILITY_LEMMA_PREF
+	PROBABILITY_POS_PREF
 )
 
 type Probability struct {
@@ -57,6 +60,8 @@ func NewProbability(probFile string, Threashold float64) *Probability {
 	this.LidstoneLambdaClass = 1.0
 
 	cfg := NewConfigFile(false, "##")
+	cfg.AddSection("LemmaPreferences", PROBABILITY_LEMMA_PREF)
+	cfg.AddSection("PosPreferences", PROBABILITY_POS_PREF)
 	cfg.AddSection("SingleTagFreq", PROBABILITY_SINGLE_TAG)
 	cfg.AddSection("ClassTagFreq", PROBABILITY_CLASS_TAG)
 	cfg.AddSection("FormTagFreq", PROBABILITY_FORM_TAG)
@@ -79,6 +84,14 @@ func NewProbability(probFile string, Threashold float64) *Probability {
 	for cfg.GetContentLine(&line) {
 		items := Split(line, " ")
 		switch cfg.GetSection() {
+		case PROBABILITY_LEMMA_PREF:
+			{
+				break
+			}
+		case PROBABILITY_POS_PREF:
+			{
+				break
+			}
 		case PROBABILITY_SINGLE_TAG:
 			{
 				key = items[0]

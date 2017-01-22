@@ -3,11 +3,12 @@ package nlp
 import (
 	"container/list"
 	"fmt"
-	"github.com/petar/GoLLRB/llrb"
-	set "gopkg.in/fatih/set.v0"
 	"math"
 	"strconv"
 	"strings"
+
+	"github.com/petar/GoLLRB/llrb"
+	set "gopkg.in/fatih/set.v0"
 )
 
 const UNOBS_INITIAL_STATE = "0.x"
@@ -336,7 +337,7 @@ func NewHMMTagger(hmmFile string, rtk bool, force int, kb int) *HMMTagger {
 				if this.Tags == nil {
 					CRASH(fmt.Sprintf("<TagsetFile> section should appear before <Forbidden> in file %s\n", hmmFile), MOD_HMM)
 				}
-				aux = items[2]
+				aux = items[0]
 				err := false
 				l := make([]string, 3)
 				TRACE(4, fmt.Sprintf("reading forbidden (%s)\n", aux), MOD_HMM)
