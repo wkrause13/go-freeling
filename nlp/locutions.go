@@ -2,10 +2,11 @@ package nlp
 
 import (
 	"container/list"
-	set "gopkg.in/fatih/set.v0"
 	"io/ioutil"
 	"strconv"
 	"strings"
+
+	set "gopkg.in/fatih/set.v0"
 )
 
 const (
@@ -184,6 +185,9 @@ func (this *Locutions) addLocution(line string) {
 	var prefix, key, lemma, tag string
 	var p int
 	items := Split(line, " ")
+	if len(items) < 3 {
+		return
+	}
 	key = items[0]
 
 	lemma = items[1]
