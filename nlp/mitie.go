@@ -71,7 +71,7 @@ import (
 	"unsafe"
 
 	"github.com/abiosoft/semaphore"
-	"github.com/advancedlogic/go-freeling/models"
+	"github.com/wkrause13/go-freeling/models"
 	set "gopkg.in/fatih/set.v0"
 )
 

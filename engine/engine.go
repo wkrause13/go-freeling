@@ -7,8 +7,8 @@ import (
 
 	"github.com/cheggaaa/pb"
 
-	"github.com/advancedlogic/go-freeling/nlp"
-	. "github.com/advancedlogic/go-freeling/terminal"
+	"github.com/wkrause13/go-freeling/nlp"
+	. "github.com/wkrause13/go-freeling/terminal"
 )
 
 type Engine struct {
@@ -58,7 +58,7 @@ func (e *Engine) InitNLP() {
 	nlpOptions.DisambiguatorFile = "common/knowledge.dat"
 
 	macoOptions := nlp.NewMacoOptions(lang)
-	macoOptions.SetDataFiles("", path+"data/common/punct.dat", path+"data/"+lang+"/dicc.src", "", "", path+"data/"+lang+"/locucions-extended.dat", path+"data/"+lang+"/np.dat", "", path+"data/"+lang+"/probabilitats.dat")
+	macoOptions.SetDataFiles("", path+"data/common/punct.dat", path+"data/"+lang+"/dicc.src", "", "", path+"data/"+lang+"/locucions_extended.dat", path+"data/"+lang+"/np.dat", "", path+"data/"+lang+"/probabilitats.dat")
 
 	nlpOptions.MorfoOptions = macoOptions
 
