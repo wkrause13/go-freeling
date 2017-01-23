@@ -52,7 +52,7 @@ func (e *Engine) InitNLP() {
 	nlpOptions.TokenizerFile = "tokenizer.dat"
 	nlpOptions.SplitterFile = "splitter.dat"
 	nlpOptions.TaggerFile = "tagger.dat"
-	// nlpOptions.ShallowParserFile = "chunker/grammar-chunk.dat"
+	nlpOptions.ShallowParserFile = "chunker/grammar-chunk.dat"
 	nlpOptions.SenseFile = "senses.dat"
 	nlpOptions.UKBFile = "" //"ukb.dat"
 	nlpOptions.DisambiguatorFile = "common/knowledge.dat"
@@ -60,6 +60,7 @@ func (e *Engine) InitNLP() {
 	macoOptions := nlp.NewMacoOptions(lang)
 	macoOptions.SetDataFiles("", path+"data/common/punct.dat", path+"data/"+lang+"/dicc.src", "", "", path+"data/"+lang+"/locucions_extended.dat", path+"data/"+lang+"/np.dat", "", path+"data/"+lang+"/probabilitats.dat")
 
+	macoOptions.RetokContractions = false
 	nlpOptions.MorfoOptions = macoOptions
 
 	nlpEngine := nlp.NewNLPEngine(nlpOptions)

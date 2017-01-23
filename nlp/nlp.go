@@ -238,7 +238,6 @@ func (this *NLPEngine) PrintList(document *models.DocumentEntity) {
 					item += a.Value.(*Analysis).getTag()
 				}
 			}
-			println(item)
 		}
 	}
 }

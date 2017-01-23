@@ -246,7 +246,6 @@ func (this *Chart) parse() {
 	}
 
 	if !gotroot {
-		//println("adding fictitious root at [" + strconv.Itoa(this.size-1) + ",0]")
 		lp := this.cover(this.size-1, 0)
 		ls := list.New()
 		for p := lp.Front(); p != nil; p = p.Next() {
@@ -258,11 +257,9 @@ func (this *Chart) parse() {
 			}
 
 			ls.PushBack(best.getHead())
-			//println("Inactive edge selected for (" + strconv.Itoa(p.Value.(Pair).first.(int)) + "," + strconv.Itoa(p.Value.(Pair).second.(int)) + ") is " + best.getHead())
 		}
 
 		e1 := NewEdgeFromString(this.gram.getStartSymbol(), ls, GRAMMAR_NOGOV)
-		//println("created fictitious rule")
 
 		for p := lp.Front(); p != nil; p = p.Next() {
 			e1.shift(p.Value.(Pair).first.(int), p.Value.(Pair).second.(int))
@@ -289,20 +286,23 @@ func (this *Chart) cover(a, b int) *list.List {
 		return list.New()
 	}
 
-	println("Covering under (" + strconv.Itoa(a) + "," + strconv.Itoa(b) + ")")
+	// println("Covering under (" + strconv.Itoa(a) + "," + strconv.Itoa(b) + ")")
 
 	f = false
 
 	best := NewEdge()
 
-	println("got passed NewEdge")
+	// println("got passed NewEdge")
+	// println(best.getHead())
 
 	for i = a; !f && i >= 0; i-- {
 		for j = b; j < b+(a-i)+1; j++ {
 			//println("ED len:" + strconv.Itoa(this.table[this.index(i, j)].Len()))
 			for ed = this.table[this.index(i, j)].Front(); ed != nil; ed = ed.Next() {
-				println(ed.Value.(*Edge).String())
+				// println(ed.Value.(*Edge).String())
 				LOG.Tracef("ed.active:%b 1st best:%b", ed.Value.(*Edge).active(), this.betterEdge(ed.Value.(*Edge), best))
+				// fmt.Printf("ed.active:%v 1st best:%v", ed.Value.(*Edge).active(), this.betterEdge(ed.Value.(*Edge), best))
+				// println(this.betterEdge(ed.Value.(*Edge), best))
 				if !ed.Value.(*Edge).active() && this.betterEdge(ed.Value.(*Edge), best) {
 					x = i
 					y = j
@@ -333,7 +333,7 @@ func (this *Chart) betterEdge(e1 *Edge, e2 *Edge) bool {
 	h2 := e2.getHead()
 	start := this.gram.getStartSymbol()
 
-	//fmt.Printf("Better Edge -> h1: %s h2:%s start:%s\n", h1, h2, start)
+	// fmt.Printf("Better Edge -> h1: %s h2:%s start:%s\n", h1, h2, start)
 
 	if h1 == start && h2 != start {
 		return true
@@ -342,8 +342,8 @@ func (this *Chart) betterEdge(e1 *Edge, e2 *Edge) bool {
 		return false
 	}
 
-	//fmt.Printf("H1 is terminal: %t H2 is terminal: %t\n", this.gram.isTerminal(h1), this.gram.isTerminal(h2))
-	//fmt.Printf("H1 specificity: %d H2 specificity: %d\n", this.gram.getSpecificity(h1), this.gram.getSpecificity(h2))
+	// fmt.Printf("H1 is terminal: %t H2 is terminal: %t\n", this.gram.isTerminal(h1), this.gram.isTerminal(h2))
+	// fmt.Printf("H1 specificity: %d H2 specificity: %d\n", this.gram.getSpecificity(h1), this.gram.getSpecificity(h2))
 	if this.gram.isTerminal(h1) && this.gram.isTerminal(h2) {
 		return this.gram.getSpecificity(h1) < this.gram.getSpecificity(h2)
 	}
@@ -427,7 +427,7 @@ func (this *Chart) findAllRules(e *Edge, ce *list.List, k int, i int) {
 		for r := lr.Front(); r != nil; r = r.Next() {
 			newR := NewRuleFromRule(r.Value.(*Rule))
 			if this.checkMatch(newR.getRight().Front().Value.(string), e.getHead()) {
-				println("    --> Match for " + e.getHead() + ". adding WILDCARD rule [" + newR.getHead() + "==>" + newR.getRight().Front().Value.(string) + "...etc")
+				// println("    --> Match for " + e.getHead() + ". adding WILDCARD rule [" + newR.getHead() + "==>" + newR.getRight().Front().Value.(string) + "...etc")
 				ed := NewEdgeFromString(newR.getHead(), newR.getRight(), newR.getGovernor())
 				ed.shift(k, i)
 				ce.PushBack(ed)

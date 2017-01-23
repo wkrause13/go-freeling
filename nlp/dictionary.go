@@ -2,10 +2,11 @@ package nlp
 
 import (
 	"container/list"
-	set "gopkg.in/fatih/set.v0"
 	"math"
 	"strconv"
 	"strings"
+
+	set "gopkg.in/fatih/set.v0"
 	//"os"
 )
 
@@ -292,13 +293,22 @@ func (this *Dictionary) tagCombination(p *list.Element, last *list.Element) *lis
 		for _, tmpItem := range tmpItems {
 			output.PushBack(tmpItem)
 		}
+
 		return output
 	} else {
 		tmpItems := Split(p.Value.(string), "/")
+
 		curr := list.New()
+
 		for _, tmpItem := range tmpItems {
+
 			curr.PushBack(tmpItem)
 		}
+
+		if p.Next() == nil {
+			return output
+		}
+
 		c := this.tagCombination(p.Next(), last)
 		for i := curr.Front(); i != nil; i = i.Next() {
 			for j := c.Front(); j != nil; j = j.Next() {
@@ -414,6 +424,7 @@ func (this *Dictionary) AnnotateWord(w *Word, lw *list.List, override bool) bool
 			for _, tmpItem := range tmpItems {
 				tgs.PushBack(tmpItem)
 			}
+
 			tc := this.tagCombination(tgs.Front(), tgs.Back().Prev())
 
 			if tc.Len() > 1 {
